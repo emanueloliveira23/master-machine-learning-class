@@ -1,0 +1,8 @@
+comandos:
+<vetor>.<operacao> - operações ponto a ponto
+clc - limpar a tela
+close all - fecha todas as janelas
+clear all - limpa o ambiente de trabalho (variáveis)
+
+boa prática: 
+close all, clear all e clc no início dos programas.
