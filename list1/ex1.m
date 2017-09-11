@@ -10,7 +10,6 @@ y = ex1data1(:,2);
 % plot(x, y, '+');
 
 % Item 2: run Stochastic Gradient Descendent
-source("sgd.m");
 alpha = 0.001;
 epochs = 1000;
 res = sgd_multi(x, y, alpha, epochs);

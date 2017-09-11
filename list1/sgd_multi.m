@@ -29,7 +29,7 @@ function res = sgd_multi(x, y, alpha, epochs)
     for i = 1:x_size
       
       % Get data (x) and label (y)
-      xi = [1 x_(i)];
+      xi = [1 x_(i,:)];
       yi = y(i);
       
       % Compute new label
