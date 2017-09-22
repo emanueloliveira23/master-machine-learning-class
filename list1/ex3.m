@@ -31,16 +31,16 @@ function errors = sme(tx, ty, weights)
   
   for l = 1:weights_size
     error_sum = 0;
-    w = weights(l);
+    w = weights(l, :)';
     
     for i = 1:tx_size
-      txi = tx(i);
-      tyi = ty(i);
-      te = tyi - txi * w;
-      error_sum = error_sum + te * te;
+      txi = [1 tx(i, :)];
+      tyi = ty(i, 1);
+      te = tyi - (txi * w);
+      error_sum = error_sum + (te * te);
     endfor
     
-    errors(l,:) = error_sum / tx_size;
+    errors(l, 1) = error_sum / tx_size;
     
   endfor 
 
@@ -55,7 +55,7 @@ plot(lambdas, training_errors);
 % Item 2.2: lambda x Square Mean Erro in test
 test_errors = sme(test_x, test_y, lambda_weights); 
 figure(2);
-plot(lambdas, test_errors);
+plot(lambdas, test_errors, 'r');
 
 % Item extra: plotting the 2 graphs in same figure
 figure(3);
