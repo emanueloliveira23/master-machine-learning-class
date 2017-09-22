@@ -3,15 +3,12 @@
 % Return Squred Mean Error errors by epoch
 function res = sgd_multi(x, y, alpha, epochs)
   
-  % Copy of data 
-  x_ = x;   
-
   % Errors by Epoch
   errors = zeros(epochs, 1);
 
   % Rows count of X
-  x_size = size(x,1);         
-
+  x_size = size(x,1);
+  
   % Columns (attributes) count of X
   attrs_cnt = size(x, 2);
   
@@ -22,15 +19,17 @@ function res = sgd_multi(x, y, alpha, epochs)
   for epoch = 1:epochs
     
     % Permuting rows of data
-    x_ = x_(randperm(x_size),:);
+    idxs = randperm(x_size);
     
     sum_error = 0;
     
     for i = 1:x_size
       
+      idx = idxs(i);
+      
       % Get data (x) and label (y)
-      xi = [1 x_(i,:)];
-      yi = y(i);
+      xi = [1 x(idx,:)];
+      yi = y(idx, 1);
       
       % Compute new label
       result_yi = xi * weights; % w0*1 + w1*x1 + ... + wn*xn; 

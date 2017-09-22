@@ -28,7 +28,7 @@ disp("By batch weights [w0 ... wn]: "), disp(batch_weights)
 x_size = size(x, 1);
 x_batch = [ones(x_size, 1) x];
 y_batch = x_batch * batch_weights;
-error_batch = 0
+error_batch = 0;
 for i = 1:1:x_size
   error = y(i) - y_batch(i);
   error_batch = error_batch + error * error;

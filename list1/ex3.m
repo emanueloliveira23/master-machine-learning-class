@@ -25,22 +25,24 @@ disp(lambda_weights);
 
 % Util function
 function errors = sme(tx, ty, weights)
-  tx_size = size(tx, 1);
+  rows = size(tx, 1);
+  _tx = [ones(rows, 1) tx];
   weights_size = size(weights, 1);
   errors = zeros(weights_size, 1);
   
   for l = 1:weights_size
     error_sum = 0;
-    w = weights(l, :)';
+    w = weights(l, :);
+    w = w';
     
-    for i = 1:tx_size
-      txi = [1 tx(i, :)];
-      tyi = ty(i, 1);
-      te = tyi - (txi * w);
-      error_sum = error_sum + (te * te);
+    for i = 1:rows
+      txi = _tx(i, :);
+      tyi = ty(i, :);
+      te = tyi - txi * w;
+      error_sum = error_sum + te * te;
     endfor
     
-    errors(l, 1) = error_sum / tx_size;
+    errors(l, 1) = error_sum / rows;
     
   endfor 
 
