@@ -1,14 +1,22 @@
 function vn = normalizeVector(v)
-
-  dim = size(v);
-
-  if dim(1)==1 || dim(2)==1
-      vn = v / sqrt(sum(v.^2));
-  else
-      #same as: vn = v./repmat(sqrt(sum(v.*v, 2)), [1 dim(2)]);
-      vn = bsxfun(@rdivide, v, sqrt(sum(v.^2, 2)));
-  end
+  
+  vRows = size(v, 1);
+  vCols = size(v, 2);
+  vn = zeros(vRows, vCols);
+  
+  for col=1:vCols
+    
+    vColVals = v(:, col);
+    
+    vMax = max(vColVals);
+    vMin = min(vColVals);
+    vRange = vMax - vMin;
+    
+    for row=1:vRows
+      vi = vColVals(row, 1);
+      vn(row, col) = (vi - vMin) / vRange;
+    endfor
+  
+  endfor
 
 endfunction
-
-%!assert (1,vectorNorm (normalizeVector ([3 4])))
