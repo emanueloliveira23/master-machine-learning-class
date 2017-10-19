@@ -1,4 +1,4 @@
-% Main entry point of list 2 - Linear Regression
+% Main entry point of list 2 - item 1 - Linear Regression
 
 clear all;
 close all;
