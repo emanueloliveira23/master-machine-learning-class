@@ -1,11 +1,12 @@
 % Final Weights
-disp("Pesos [w0 ... wn]: "); 
+disp("Weights [w0 ... wn]: ");
 disp(res.weights);
 
 % Plot SME x EPOCHS to TEST set
+figure();
 plot(1:1:EPOCHS, res.errors(:, 1));
-xlabel ("Época");
-ylabel ("Erro Quadrático Médio");
+xlabel ("Epoch");
+ylabel ("Squared Mean Error");
 
 % Last error
 disp("Last error");

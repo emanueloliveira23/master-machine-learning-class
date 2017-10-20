@@ -17,7 +17,8 @@ LAMBDAS = [0 0.01 0.25];
 COUNT = size(X, 1);
 
 % Plot
-% item2_plot_data(X, Y);
+figure();
+item2_plot_data(X, Y);
 
 % Map Features
 complexX = mapFeature(X(:,1), X(:, 2));

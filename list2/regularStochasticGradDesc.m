@@ -21,4 +21,3 @@ function weights = regularStochasticGradDesc(X, y, alpha, epochs, lambda)
   endfor
     
 endfunction
-

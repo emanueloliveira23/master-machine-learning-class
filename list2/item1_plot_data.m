@@ -11,10 +11,11 @@ for i = 1:1:COUNT
   endif
 endfor
 
+figure();
 plot(admitted(:, 1), admitted(:, 2), '+b');
 hold on;
 plot(nonadmitted(:, 1), nonadmitted(:, 2), '+r');
-xlabel ("Nota 1");
-ylabel ("Nota 2");
-h = legend ({"+ Admitidos"}, "+ Não Admitidos");
+xlabel ("Score 1");
+ylabel ("Score 2");
+h = legend ({"Admittted"}, "Not Admitted");
 legend (h, "location", "northeastoutside");

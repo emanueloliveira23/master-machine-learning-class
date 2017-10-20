@@ -18,7 +18,7 @@ function item2_plot_data(X, Y)
   plot(reproved(:, 1), reproved(:, 2), '+r');
   xlabel ("Score 1");
   ylabel ("Score 2");
-  h = legend ({"+ Aprovados"}, "+ Reprovados");
+  h = legend ({"Approved"}, "Reproved");
   legend (h, "location", "northeastoutside");
 
 endfunction
