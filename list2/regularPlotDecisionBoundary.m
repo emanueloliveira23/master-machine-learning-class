@@ -8,7 +8,7 @@ function regularPlotDecisionBoundary(theta)
   % Evaluate z = theta*x over the grid
   for i = 1:length(u)
       for j = 1:length(v)
-          z(i,j) = [1 mapFeature(u(i), v(j))]*theta;
+          z(i,j) = mapFeature(u(i), v(j)) * theta;
       end
   end
   z = z'; % important to transpose z before calling contour

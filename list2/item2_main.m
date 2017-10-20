@@ -6,7 +6,7 @@ clc;
 
 
 % Load
-load "ex2data2.txt";
+load ex2data2.txt;
 X = normalizeVector(ex2data2(:, [1, 2]));
 Y = ex2data2(:, 3);
 
@@ -21,7 +21,6 @@ COUNT = size(X, 1);
 
 % Map Features
 complexX = mapFeature(X(:,1), X(:, 2));
-complexX = [ones(COUNT, 1) complexX];
 
 % Run
 for lambda = LAMBDAS
@@ -30,10 +29,10 @@ for lambda = LAMBDAS
     complexX, Y,
     ALPHA, EPOCHS, lambda
   );
-  
+
   % Ploting
   figure();
   item2_plot_data(X, Y);
   regularPlotDecisionBoundary(weights);
-  
+
 endfor
