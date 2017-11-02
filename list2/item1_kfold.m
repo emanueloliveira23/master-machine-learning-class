@@ -7,7 +7,7 @@ clc;
 
 % Load
 load "ex2data1.txt";
-X = ex2data1(:, [1, 2]);
+X = normalizeVector(ex2data1(:, [1, 2]));
 Y = ex2data1(:, 3);
 
 % Const
@@ -23,28 +23,28 @@ step = COUNT/K;
 foldsStart = 1:step:COUNT;
 foldsEnd = step:step:COUNT;
 folds = [foldsStart(:) foldsEnd(:)];
-weightSum = zeros(K, ATTRS + 1); 
+weightSum = zeros(K, ATTRS + 1);
 
 for k=1:K
 
   testStart = folds(k, 1);
   testEnd = folds(k, 2);
-  
+
   % Test
   test = testStart:testEnd;
-  xTest = normalizeVector(X(test, :));
+  xTest = X(test, :);
   yTest = Y(test, :);
-  
+
   % Training
   training = setdiff(ALL, test);
-  xTraining = normalizeVector(X(training, :));
+  xTraining = X(training, :);
   yTraining = Y(training, :);
-  
+
   % Run
   res = stochasticGradDesc(xTraining, yTraining, xTest, yTest, ALPHA, EPOCHS);
   weightSum(k, :) = res.weights(:);
-  
-  
+
+
 endfor
 
 % Computing result
@@ -52,12 +52,10 @@ weightsRows = size(weightSum, 1);
 weightsCount = size(weightSum, 2);
 weightsMean = zeros(weightsCount, 1);
 
-for w=1:weightsCount  
+for w=1:weightsCount
   weightsMean(w, 1) = sum(weightSum(:, w)) / weightsRows;
 endfor
 
 % Final Weights
-disp("Pesos [w0 ... wn]: "); 
+disp("Pesos [w0 ... wn]: ");
 disp(weightsMean);
-
-
