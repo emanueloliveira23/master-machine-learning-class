@@ -13,9 +13,13 @@ load ex3data1.mat;
 [xRowsCount xColsCount] = size(X);
 [yRowsCount yColsCount] = size(T);
 
-trainingSetSize = 4000;
-validationSetSize = 500;
-testSetSize = 500;
+traningPercent = 0.8;
+validationPercent = 0.1;
+testPercent = 0.1;
+
+trainingSetSize = floor(xRowsCount * traningPercent);
+validationSetSize = floor(xRowsCount * validationPercent);
+testSetSize = floor(xRowsCount * testPercent);
 
 trainingSetStart = 1;
 trainingSetEnd = trainingSetSize;
@@ -24,13 +28,21 @@ validationSetEnd = validationSetStart + validationSetSize - 1;
 testSetStart = validationSetEnd + 1;
 testSetEnd = testSetStart + testSetSize - 1;
 
+allSetIndexes = randperm(xRowsCount)';
+xTraningSet = X(allSetIndexes(trainingSetStart:trainingSetEnd, :), :);
+yTraningSet = T(allSetIndexes(trainingSetStart:trainingSetEnd, :), :);
+xValidationSet = X(allSetIndexes(validationSetStart:validationSetEnd, :), :);
+yValidationSet = T(allSetIndexes(validationSetStart:validationSetEnd, :), :);
+xTestSet = X(allSetIndexes(testSetStart:testSetEnd, :), :);
+yTestSet = T(allSetIndexes(testSetStart:testSetEnd, :), :);
+
+
 alpha = 0.0001;
-hiddenLayerNeuronsCount = 10;
+hiddenLayerNeuronsCount = 20;
 outputLayerNeuronsCount = 10;
 
 inputToHiddenWeights = 0.2 * rand(hiddenLayerNeuronsCount, xColsCount + 1); % + 1 >> w0
 hiddenToOutputWeights = 0.2 * rand(outputLayerNeuronsCount, hiddenLayerNeuronsCount + 1); % + 1 >> w0
-
 
 % Traning
 
@@ -38,28 +50,29 @@ lastValidationError = inf;
 trainingErrorEpoch = [];
 validationErrorEpoch = [];
 
-growthControl = 2; 
+growthControl = 1;
 
 while growthControl > 0
+
+	% Shuffle 
 	
+	traningSetIndexes = randperm(trainingSetSize)';
+	xTraningSetEpoch = xTraningSet(traningSetIndexes, :);
+	yTraningSetEpoch = yTraningSet(traningSetIndexes, :);
 
-	indexes = randperm(xRowsCount)';
-
-	xTraningSet = X(indexes(trainingSetStart:trainingSetEnd, :), :);
-	yTraningSet = T(indexes(trainingSetStart:trainingSetEnd,:), :);
-
-	xValidationSet = X(indexes(validationSetStart:validationSetEnd), :);
-	yValidationSet = T(indexes(validationSetStart:validationSetEnd), :);
+	validationSetIndexes = randperm(validationSetSize)';
+	xValidationSetEpoch = xValidationSet(validationSetIndexes, :);
+	yValidationSetEpoch = yValidationSet(validationSetIndexes, :);
 
 
 	% Traning
 
-	errors = zeros(trainingSetSize, yColsCount);
+	trainingErrors = zeros(trainingSetSize, yColsCount);
 
 	for i = 1:trainingSetSize
 
 		% Input >> Hidden
-		Xi = [-1 xTraningSet(i,:)]';
+		Xi = [-1 xTraningSetEpoch(i,:)]';
 		Ui = inputToHiddenWeights * Xi;
 		Yi = 1./(1+exp(-Ui));
 
@@ -69,7 +82,7 @@ while growthControl > 0
 		Oi = 1./(1+exp(-Vi));
 
 		% Error
-		Ei = yTraningSet(i) - Oi;
+		Ei = yTraningSetEpoch(i) - Oi;
 
 		% Local Gradients
 		sigk = Oi.*(1 - Oi);
@@ -82,24 +95,24 @@ while growthControl > 0
 		hiddenToOutputWeights = hiddenToOutputWeights + alpha*sigk*Zi';
 		inputToHiddenWeights = inputToHiddenWeights + alpha*sigi*Xi';
 
-		errors(i, :) = Ei;
+		trainingErrors(i, :) = Ei;
 
 	endfor % traning sample
 
 	trainingErrorEpoch = [
 		trainingErrorEpoch; 
-		sum(sum(errors.^2)) / trainingSetSize
+		sum(sum(trainingErrors.^2)) / trainingSetSize
 	];
 
 
 	% Validation
 
-	errors = zeros(validationSetSize, yColsCount);
+	validationErrors = zeros(validationSetSize, yColsCount);
 
 	for i = 1:validationSetSize
 
 		% Input >> Hidden
-		Xi = [-1 xValidationSet(i,:)]';
+		Xi = [-1 xValidationSetEpoch(i,:)]';
 		Ui = inputToHiddenWeights * Xi;
 		Yi = 1./(1+exp(-Ui));
 
@@ -109,15 +122,15 @@ while growthControl > 0
 		Oi = 1./(1+exp(-Vi));
 
 		% Error
-		Ei = yValidationSet(i) - Oi;
+		Ei = yValidationSetEpoch(i) - Oi;
 
-		errors(i, :) = Ei;
+		validationErrors(i, :) = Ei;
 
 	endfor % validation sample
 
 	validationErrorEpoch = [
 		validationErrorEpoch; 
-		sum(sum(errors.^2)) / validationSetSize 
+		sum(sum(validationErrors.^2)) / validationSetSize 
 	];
 
 
