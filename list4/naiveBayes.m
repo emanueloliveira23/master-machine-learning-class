@@ -1,29 +1,49 @@
+# Function that receive training data and build a Naive Bayes Model.
+# Return: Naive Bayes Model (probabilities, covariance and mean).
 function [model] = naiveBayes(X, Y)
 	
 	[rowsCount, colsCount] = size(X);
 	
 	[countPerClass, classes] = hist(Y, unique(Y));
 	
+	classCount = length(classes);
+	
 	propabilityPerClass = countPerClass./rowsCount;
 	
-	u = zeros(colsCount, 1);
-	for c = 1:colsCount
-		u(c, :) = mean(X(:, c));
-	endfor 
-	
-	u
-	
-	covar = 0;
+	# calculate mean of each column of data per class
+	uPerClass = zeros(classCount, colsCount);
 	for r = 1:rowsCount
-		x = X(r, :)';
-		covar = covar + ( (x-u) * (x-u)' );
+	    x = X(r,:)';
+	    y = Y(r,:);
+	    for col = 1:colsCount
+	    	uPerClass(y, col) = x(col,:);
+	    endfor
 	endfor
-	covar = 1/(rowsCount-1) * covar;
+	for c=classes
+	    uPerClass(c,:) = uPerClass(c,:) / countPerClass(c); 
+	endfor
 	
-	covar
-	
+	# calculate covariance matrix per class
+	# reshape is to use 3d matrix as 2d matrix
+	covarPerClass = zeros(classCount, colsCount^2);
+	for r = 1:rowsCount
+	    x = X(r,:)';
+	    y = Y(r,:);
+	    uc = uPerClass(y, :);
+	    ux = (x-uc) * (x-uc)';
+	    covarPerClass(y, :) += reshape(ux, 1, 4);
+    endfor
+    for c=classes	    
+        clazzCovar = reshape(covarPerClass(c,:), 2, 2);
+	    clazzCovar = 1/(countPerClass(c) - 1) * clazzCovar;
+	    covarPerClass(c, :) = reshape(clazzCovar, 1, 4);
+	endfor
+		
 	model.probabilities = propabilityPerClass;
-	model.covar = covar;
-	model.mean = u;
+	model.mean = uPerClass;
+	model.covar = covarPerClass;
+	model.classes = classes';
 	
 endfunction
+
+
