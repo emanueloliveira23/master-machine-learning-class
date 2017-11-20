@@ -1,5 +1,5 @@
-# Function that receive training data and build a Naive Bayes Model.
-# Return: Naive Bayes Model (probabilities, covariance and mean).
+% Function that receive training data and build a Naive Bayes Model.
+% Return: Naive Bayes Model (probabilities, covariance and mean).
 function [model] = naiveBayes(X, Y)
 	
 	[rowsCount, colsCount] = size(X);
@@ -23,20 +23,20 @@ function [model] = naiveBayes(X, Y)
 	    uPerClass(c,:) = uPerClass(c,:) / countPerClass(c); 
 	endfor
 	
-	# calculate covariance matrix per class
-	# reshape is to use 3d matrix as 2d matrix
+	% calculate covariance matrix per class
+	% reshape is to use 3d matrix as 2d matrix
 	covarPerClass = zeros(classCount, colsCount^2);
 	for r = 1:rowsCount
 	    x = X(r,:)';
 	    y = Y(r,:);
 	    uc = uPerClass(y, :);
 	    ux = (x-uc) * (x-uc)';
-	    covarPerClass(y, :) += reshape(ux, 1, 4);
+	    covarPerClass(y, :) += reshape(ux, 1, colsCount^2);
     endfor
     for c=classes	    
-        clazzCovar = reshape(covarPerClass(c,:), 2, 2);
+        clazzCovar = reshape(covarPerClass(c,:), colsCount, colsCount);
 	    clazzCovar = 1/(countPerClass(c) - 1) * clazzCovar;
-	    covarPerClass(c, :) = reshape(clazzCovar, 1, 4);
+	    covarPerClass(c, :) = reshape(clazzCovar, 1, colsCount^2);
 	endfor
 		
 	model.probabilities = propabilityPerClass;
