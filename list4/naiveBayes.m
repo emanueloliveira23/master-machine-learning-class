@@ -16,7 +16,7 @@ function [model] = naiveBayes(X, Y)
 	    x = X(r,:)';
 	    y = Y(r,:);
 	    for col = 1:colsCount
-	    	uPerClass(y, col) = x(col,:);
+	    	uPerClass(y, col) += x(col,:);
 	    endfor
 	endfor
 	for c=classes
@@ -29,7 +29,7 @@ function [model] = naiveBayes(X, Y)
 	for r = 1:rowsCount
 	    x = X(r,:)';
 	    y = Y(r,:);
-	    uc = uPerClass(y, :);
+	    uc = uPerClass(y, :)';
 	    ux = (x-uc) * (x-uc)';
 	    covarPerClass(y, :) += reshape(ux, 1, colsCount^2);
     endfor
