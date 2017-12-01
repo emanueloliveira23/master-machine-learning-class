@@ -4,7 +4,7 @@ clc;
 
 % Load data
 load ex5data1.data;
-X = ex5data1(:,1:4);
+X = normalizeVector(ex5data1(:,1:4));
 Y = ex5data1(:, 5);
 sizeX = size(X, 1);
 

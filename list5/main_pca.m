@@ -4,7 +4,7 @@ clc;
 
 % Load data
 load ex5data1.data;
-X = ex5data1(:,1:4);
+X = normalizeVector(ex5data1(:,1:4));
 Y = ex5data1(:, 5);
 [sizeX, colsX] = size(X);
 
@@ -20,23 +20,28 @@ covX = cov(X);
 % Eigenvector and Eigenvalues
 [eigvecCovX, eigvalCovX] = eig(covX);
 
-eigvecCovX
-eigvalCovX
-
-K = 2;
 
 % Get top K eigenvalues
+K = 2;
 eigvalCovX = diag(eigvalCovX);
 topkEigValCovX = sort(eigvalCovX, 'descend')(1:K, :);
 
 % Get top K eigenvector 
-topkEigVecCovX = [];
-topkEigVecCovXIdx = [];
+topkEigVecCovX = []; % Eigenvectors of top k eigenvalues
 for k = 1:K
   eigVal = topkEigValCovX(k,:);
   eigValIdx = find(eigvalCovX == eigVal);
   topkEigVecCovX = [topkEigVecCovX; eigvecCovX(eigValIdx, :)];
-  topkEigVecCovXIdx = [topkEigVecCovXIdx; eigValIdx];
 endfor
-topkEigVecCovX % Eigenvectors of top k eigenvalues
-topkEigVecCovXIdx % Indexes of columns of top k eigenvectors
+topkEigVecCovX;    
+
+% Reducing matrix
+rX = X * topkEigVecCovX';
+
+plot(rX(1:50,1), rX(1:50,2), '+r');
+hold on;
+plot(rX(51:100,1), rX(51:100,2), '+g');
+hold on;
+plot(rX(101:150,1), rX(101:150,2), '+b');
+hold on;
+legend('setosa', 'versicolo', 'virginica');
