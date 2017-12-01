@@ -17,8 +17,8 @@ for i = 1:size(X1, 2)
 end
 
 % Plot the SVM boundary
-hold on
-contour(X1, X2, vals, [0 0], 'Color', 'b');
+hold on;
+contour(X1, X2, vals, 'LineWidth', 2, 'LineColor', 'green');
 hold off;
 
 end
